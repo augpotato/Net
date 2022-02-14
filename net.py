@@ -4,8 +4,8 @@ from torch import nn
 from torch.nn import functional as F
 
 class Conv_Block(nn.Module):  #卷积板块
-    def __init__(self,in_channel,out_channel):
-        super(Conv_Block,self).__init__()  #初始化父类方法，固定格式
+    def __init__(self, in_channel, out_channel):
+        super(Conv_Block, self).__init__()  #初始化父类方法，固定格式
         self.layer = nn.Sequential(
             # Conv2d卷积格式(输入，输出，卷积核大小，padding,步长，padding格式，bias)
             # 以下为第一次卷积
@@ -26,7 +26,7 @@ class Conv_Block(nn.Module):  #卷积板块
 
 #下采样实现
 class DownSample(nn.Module):
-    def __init__(self):
+    def __init__(self, channel):
         super(DownSample, self).__init__()
         self.layer = nn.Sequential(
             nn.Conv2d(channel, channel, 3, 2, 1, padding_mode='reflect', bias=False),
@@ -39,7 +39,7 @@ class DownSample(nn.Module):
 #上采样实现,采用插值法实现,不用转置卷积因为会产生一圈空洞，对分割影响大
 #根据U-Net最下方，先上采样，再与之前的图进行concat拼接，再进行卷积
 class UpSample(nn.Module):
-    def __init__(self):
+    def __init__(self, channel):
         super(UpSample, self).__init__()
         self.layer = nn.Conv2d(channel, channel//2, 1, 1) #上采样后的1x1卷积,通道除以二
 
